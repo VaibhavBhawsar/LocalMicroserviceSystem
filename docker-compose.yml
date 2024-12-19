@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  python_service:
+    build:
+      context: ./python_service
+    ports:
+      - "8000:8000"
+
+  csharp_service:
+    build:
+      context: ./csharp_service
+    ports:
+      - "8080:8080"
