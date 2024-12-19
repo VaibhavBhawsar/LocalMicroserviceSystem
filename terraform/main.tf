@@ -1,23 +1,33 @@
-provider "docker" {}
-
-resource "docker_network" "local_network" {
-  name = "local_network"
+terraform {
+  required_providers {
+    docker = {
+      source  = "kreuzwerker/docker"
+      version = "~> 2.0"
+    }
+  }
+  required_version = ">= 0.12"
 }
 
-resource "docker_container" "python_service" {
-  image = "python:3.10-slim"
-  name  = "python_service"
-  ports {
-    internal = 8000
-    external = 8000
+provider "docker" {
+  # Configuration options for the Docker provider can go here
+}
+
+# Build the Docker image from a Dockerfile
+resource "docker_image" "my_image" {
+  name = "my-image"
+  build {
+    context    = "${path.module}/../python_service" # Path to the Dockerfile context
+    dockerfile = "Dockerfile"                         # Name of the Dockerfile
   }
 }
 
-resource "docker_container" "csharp_service" {
-  image = "mcr.microsoft.com/dotnet/aspnet:6.0"
-  name  = "csharp_service"
-  ports {
-    internal = 8080
-    external = 8080
-  }
+# Define outputs
+output "image_id" {
+  value       = docker_image.my_image.id
+  description = "The ID of the Docker image"
+}
+
+output "image_name" {
+  value       = docker_image.my_image.name
+  description = "The name of the Docker image"
 }
