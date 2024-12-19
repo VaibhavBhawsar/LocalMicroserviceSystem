@@ -11,4 +11,4 @@ services:
     build:
       context: ./csharp_service
     ports:
-      - "8080:8080"
+      - "8081:8080"  # Change external port from 8080 to 8081
